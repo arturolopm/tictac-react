@@ -92,14 +92,22 @@ class Game extends React.Component {
   }
 
   render() {
+    
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
     const currentSquare= this.state.currentSquare
+    function col(a)  {
+      return  a === 0|| a=== 3|| a===6 ? 1 : a ===1||a===4||a===7 ? 2 : 3
+    }
+    function row (a)  {
+      return a <=2 ? 1 : a<=5 ? 2 : 3
+    }
+    
     const moves = history.map((step, move) => {
       
       const desc = move ?
-        'Go to move #' + move + "Current square: "+currentSquare[move -1]:
+        'Go to move #' + move + " col: "+col(currentSquare[move -1])+" row: " + row(currentSquare[move-1]) + " made by player: "+ (move % 2 ? "X" : "O"):
         'Go to game start';
       return (
         <li key={move}>
