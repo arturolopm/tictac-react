@@ -30,12 +30,73 @@ class Board extends React.Component {
       />
     );
   }
+  toMapping () {
+    const toMap = []
+    for (let i=0; i<=8; i++){
+      toMap.push(i)
+      console.log(toMap);
+      
+    }return toMap
+    
 
+  }
+  
+  
+  
   render() {
+    const toMap=this.toMapping()
+    
+    const firstMap = toMap.slice(0,3)
+    const secondMap = toMap.slice(3,6)
+    const thirdMap = toMap.slice(6,9)
+
+    
+      
+    const firstThree =  firstMap.map((stepIn,toRender) =>{
+      return(<>
+        {this.renderSquare(stepIn)}
+          </>
+          )
+    })
+    const first = <div className="board-row">
+    {firstThree}
+    </div>
+    const secondThird =  secondMap.map((stepIn,toRender) =>{
+      return(<>
+        {this.renderSquare(stepIn)}
+          </>
+          )
+    })
+    const second = <div className="board-row">
+    {secondThird}
+    </div>
+
+const thirdThird =  thirdMap.map((stepIn,toRender) =>{
+  return(<>
+    {this.renderSquare(stepIn)}
+      </>
+      )
+})
+const third = <div className="board-row">
+{thirdThird}
+</div>
+    
+      return (<>
+        {first}
+        {second}
+        {third}
+        </>
+        )
+    
+  
+   
     
     return (
-      <div>
-        <div className="board-row">
+      <div>{first}
+     
+       
+      
+        {/* <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
           {this.renderSquare(2)}
@@ -49,7 +110,7 @@ class Board extends React.Component {
           {this.renderSquare(6)}
           {this.renderSquare(7)}
           {this.renderSquare(8)}
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -102,7 +163,7 @@ class Game extends React.Component {
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0})
-      console.log(step)
+      
      
   }
   
@@ -113,6 +174,8 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
     const currentSquare= this.state.currentSquare
+    const stepNumber = this.state.stepNumber
+    
     function col(a)  {
       return  a === 0|| a=== 3|| a===6 ? 1 : a ===1||a===4||a===7 ? 2 : 3
     }
@@ -121,13 +184,15 @@ class Game extends React.Component {
     }
     
     const moves = history.map((step, move) => {
+      const clickedInList = move === stepNumber
       
+      const clickedList = clickedInList ? " clickedInList" : ""
       const desc = move ?
         'Go to move #' + move + " col: "+col(currentSquare[move -1])+" row: " + row(currentSquare[move-1]) + " made by player: "+ (move % 2 ? "X" : "O"):
         'Go to game start';
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button className={`listButtons ${clickedList}`} onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>
       );
     });

@@ -1,4 +1,24 @@
 .currentClicked {
     background-color: red;
     color: aqua;
+    
+}
+
+.listButtons {
+    color:navy;
+    border-radius: 0 0.5rem;
+    background: snow;
+}
+.listButtons:hover{
+    border-radius: 0 0.5rem 0.5rem 0;
+    background-color: navy;
+    font-weight: bold;
+    color:orangered;
+    transition: 500ms
+}
+.clickedInList {
+    color:navy;
+    font-weight: bold;
+    background: paleturquoise;
+    border-radius: 0 0.5rem 0.5rem 0 ;
 }
