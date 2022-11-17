@@ -2,13 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import './component.css'
+import './mediaQuery.css'
 function Square(props) {
+  const winner = props.winner
+  const winnerSquares= winner? " wonSquares":""
+  
   const clickedSquare=props.clickedSquare
   
   const clicked= clickedSquare? " currentClicked" : ""
 
   return (
-    <button className={`square${clicked}`} onClick={props.onClick} id={props.id}>
+    <button className={`square${clicked}${winnerSquares}`} onClick={props.onClick} id={props.id}>
       {props.value}
     </button>
   );
@@ -16,8 +20,14 @@ function Square(props) {
 
 class Board extends React.Component {
   renderSquare(i) {
-    const currentSquare=this.props.currentSquare
     
+    const winner=this.props.winner
+    const wonId= winner? winner[1]:null
+
+    const won= wonId?.find(element=>element===i)
+    const hasWon= won==i? true:false
+    const currentSquare=this.props.currentSquare
+     
     
     const clickedSquare = currentSquare===i 
     
@@ -27,6 +37,7 @@ class Board extends React.Component {
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
         id={i}
+        winner={hasWon}
       />
     );
   }
@@ -34,8 +45,6 @@ class Board extends React.Component {
     const toMap = []
     for (let i=0; i<=8; i++){
       toMap.push(i)
-      console.log(toMap);
-      
     }return toMap
     
 
@@ -86,33 +95,7 @@ const third = <div className="board-row">
         {second}
         {third}
         </>
-        )
-    
-  
-   
-    
-    return (
-      <div>{first}
-     
-       
-      
-        {/* <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div> */}
-      </div>
-    );
+        )  
   }
 }
 
@@ -128,6 +111,8 @@ class Game extends React.Component {
       stepNumber: 0,
       xIsNext: true,
       currentSquare: [],
+      reversed: false,
+      draw: false
       
     };
   }
@@ -139,9 +124,20 @@ class Game extends React.Component {
     
     const currentSquare = this.state.currentSquare.slice(0, this.state.stepNumber).concat(i)
     
-  
+   
     if (calculateWinner(squares) || squares[i]) {
+      
       return;
+    }
+    if (this.state.stepNumber<8){
+      this.setState({
+        draw: false
+      })
+    }
+    if (!calculateWinner(squares) && this.state.stepNumber===8){
+      this.setState({
+        draw: !this.state.draw
+      })
     }
     squares[i] = this.state.xIsNext ? "X" : "O";
     this.setState({
@@ -164,8 +160,15 @@ class Game extends React.Component {
       stepNumber: step,
       xIsNext: (step % 2) === 0})
       
-     
+    }
+  reverseList(){
+    this.setState({
+      reversed:!this.state.reversed
+    })
+    
+    
   }
+     
   
 
   render() {
@@ -175,6 +178,11 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
     const currentSquare= this.state.currentSquare
     const stepNumber = this.state.stepNumber
+    const reverseList = this.state.reversed
+    const reversedList = reverseList ? " reversedList" : ""
+    const draw = this.state.draw
+    const message = draw? <div>Draw!, please restart the game<br></br> Or goback to another move</div>:""
+    
     
     function col(a)  {
       return  a === 0|| a=== 3|| a===6 ? 1 : a ===1||a===4||a===7 ? 2 : 3
@@ -199,7 +207,7 @@ class Game extends React.Component {
 
     let status;
     if (winner) {
-      status = "Winner: " + winner;
+      status = "Winner: " + winner[0];
     } else {
       status = "Next player: " + (this.state.xIsNext ? "X" : "O");
     }
@@ -208,15 +216,20 @@ class Game extends React.Component {
       <div className="game">
         <div className="game-board">
           <Board
+            winner = {winner}
             currentSquare={currentSquare[currentSquare.length -1]}
             squares={current.squares}
             onClick={i => this.handleClick(i)}
           />
         </div>
+        
         <div className="game-info">
+        
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <button className={`listButtons`} onClick={()=>this.reverseList()} >Reverse order</button>
+          <ol className={`${reversedList}`}>{moves}</ol>
         </div>
+        <div className='draw'>{message}</div>
       </div>
     );
   }
@@ -241,7 +254,8 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      const winnerLine=lines[i]
+      return [squares[a],winnerLine];
     }
   }
   return null;

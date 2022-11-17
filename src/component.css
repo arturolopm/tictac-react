@@ -8,6 +8,7 @@
     color:navy;
     border-radius: 0 0.5rem;
     background: snow;
+    display: inline;
 }
 .listButtons:hover{
     border-radius: 0 0.5rem 0.5rem 0;
@@ -21,4 +22,21 @@
     font-weight: bold;
     background: paleturquoise;
     border-radius: 0 0.5rem 0.5rem 0 ;
+}
+
+.reversedList{
+    display:flex;
+    flex-direction: column-reverse;
+}
+.wonSquares{
+    background-color: yellow;
+    color: aqua;
+}
+.draw{
+    
+    background-color: paleturquoise;
+    border-radius: 0.5rem;
+    color: crimson;
+    border: 2px dotted navy;
+
 }

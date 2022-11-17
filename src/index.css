@@ -2,7 +2,16 @@ body {
     font: 14px "Century Gothic", Futura, sans-serif;
     margin: 20px;
   }
-  
+  .game {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  .game-board{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
   ol, ul {
     padding-left: 30px;
   }
@@ -47,5 +56,10 @@ body {
   
   .game-info {
     margin-left: 20px;
+    
   }
-  
+  .reversedList {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+

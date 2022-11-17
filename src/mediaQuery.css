@@ -1,0 +1,11 @@
+@media (min-width: 330px) {
+    .game {
+        display: flex;
+      }
+    
+    .game-info {
+        display: flex;
+        flex-direction: column;
+
+    }
+  }
